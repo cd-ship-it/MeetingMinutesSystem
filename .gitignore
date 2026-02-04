@@ -6,6 +6,10 @@ client_secret_*.json
 /uploads/*
 !/uploads/.gitkeep
 
+# Log files (keep directory)
+/logs/*
+!/logs/.gitkeep
+
 # OS and editor
 .DS_Store
 *.swp

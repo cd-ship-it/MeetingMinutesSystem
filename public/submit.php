@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 $config = require __DIR__ . '/../config/config.php';
 require __DIR__ . '/../config/db.php';
+require __DIR__ . '/../config/logger.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ' . $config['app_url'] . '/index.php');
@@ -133,6 +134,8 @@ SQL;
     if ($filePath && is_file($config['upload']['dir'] . '/' . basename($filePath))) {
         @unlink($config['upload']['dir'] . '/' . basename($filePath));
     }
+    app_log('[submit] ' . $e->getMessage(), $config);
+    app_log('[submit] ' . $e->getTraceAsString(), $config);
     sendError('Could not save. Please try again.', $baseUrl, $isXhr);
 }
 

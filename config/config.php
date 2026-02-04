@@ -44,13 +44,17 @@ $config = [
         'api_key' => getenv('OPENAI_API_KEY') ?: '',
     ],
     'use_ai_for_minutes_summary' => filter_var(
-        (($v = getenv('USE_AI_FOR_MINUTES_SUMMARY')) !== false && $v !== '' ? $v : '1'),
+        (($v = getenv('USE_AI_FOR_MINUTES_SUMMARY')) !== false && $v !== '' ? $v : '0'),
         FILTER_VALIDATE_BOOLEAN
     ),
     'upload' => [
         'dir' => dirname(__DIR__) . '/uploads',
         'max_bytes' => 20 * 1024 * 1024, // 20 MB
         'allowed_extensions' => ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'odt', 'ods', 'txt', 'rtf'],
+    ],
+    'log' => [
+        'dir' => dirname(__DIR__) . '/logs',
+        'file' => 'app.log',
     ],
     'required_fields' => [
         'chair_first_name',
