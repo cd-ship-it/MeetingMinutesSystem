@@ -1,0 +1,15 @@
+# Environment and secrets
+.env
+client_secret_*.json
+
+# Uploaded files (keep directory)
+/uploads/*
+!/uploads/.gitkeep
+
+# OS and editor
+.DS_Store
+*.swp
+*.swo
+
+# Composer (if used later)
+/vendor/
