@@ -1,6 +1,6 @@
 # Environment and secrets
 .env
-client_secret_*.json
+client_secret*.json
 
 # Uploaded files (keep directory)
 /uploads/*
