@@ -7,7 +7,7 @@ require __DIR__ . '/../config/db.php';
 require __DIR__ . '/../config/logger.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ' . $config['app_url'] . '/index.php');
+    header('Location: ' . $config['app_url'] . '/');
     exit;
 }
 
@@ -20,7 +20,7 @@ function sendError(string $msg, string $baseUrl, bool $isXhr): void {
         echo json_encode(['success' => false, 'error' => $msg]);
         exit;
     }
-    header('Location: ' . $baseUrl . '/index.php?error=' . urlencode($msg));
+    header('Location: ' . $baseUrl . '/?error=' . urlencode($msg));
     exit;
 }
 $uploadDir = $config['upload']['dir'];
@@ -141,8 +141,8 @@ SQL;
 
 if ($isXhr) {
     header('Content-Type: application/json');
-    echo json_encode(['success' => true, 'redirect' => $baseUrl . '/index.php?success=1']);
+    echo json_encode(['success' => true, 'redirect' => $baseUrl . '/?success=1']);
     exit;
 }
-header('Location: ' . $baseUrl . '/index.php?success=1');
+header('Location: ' . $baseUrl . '/?success=1');
 exit;

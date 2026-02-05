@@ -31,7 +31,7 @@ $useAiSummary = !empty($config['use_ai_for_minutes_summary']);
                 <p class="font-medium">Minutes submitted successfully.</p>
                 <p class="mt-2">You can close this window now.</p>
                 <p class="mt-4">
-                    <a href="<?= htmlspecialchars($baseUrl . '/index.php') ?>" class="underline font-medium">Submit another</a>
+                    <a href="<?= htmlspecialchars($baseUrl . '/') ?>" class="underline font-medium">Submit another</a>
                 </p>
             </div>
         <?php endif; ?>
@@ -70,7 +70,7 @@ $useAiSummary = !empty($config['use_ai_for_minutes_summary']);
                 <h2 class="text-lg font-medium text-slate-700 mb-3">Meeting details</h2>
                 <div class="space-y-4">
                     <div>
-                        <span class="block text-sm font-medium text-slate-600 mb-2">Campus name<?= in_array('campus_name', $required_fields) ? ' *' : '' ?></span>
+                        <span class="text-lg text-sm font-medium text-slate-600 mb-2">Campus name<?= in_array('campus_name', $required_fields) ? ' *' : '' ?></span>
                         <div class="grid grid-cols-2 gap-2" role="group" aria-label="Campus name">
                             <?php foreach ($campus_names as $i => $name): ?>
                                 <label class="inline-flex items-center rounded-lg border border-slate-200 px-3 py-2 hover:bg-slate-50 cursor-pointer">
@@ -186,7 +186,7 @@ $useAiSummary = !empty($config['use_ai_for_minutes_summary']);
                 <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                     Submit
                 </button>
-                <a href="<?= htmlspecialchars($baseUrl) ?>/index.php" class="px-4 py-2 border border-slate-300 rounded-lg font-medium text-slate-700 hover:bg-slate-50">Clear</a>
+                <a href="<?= htmlspecialchars($baseUrl) ?>/" class="px-4 py-2 border border-slate-300 rounded-lg font-medium text-slate-700 hover:bg-slate-50">Clear</a>
             </div>
         </form>
         </div>

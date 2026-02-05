@@ -7,13 +7,37 @@ $config = require __DIR__ . '/../../config/config.php';
 require __DIR__ . '/../../config/db.php';
 
 $baseUrl = $config['app_url'];
-$isProduction = $config['env'] === 'production';
 $clientId = $config['google']['client_id'] ?? null;
 
-// Auth: in production require Google OAuth; in development skip
-if ($isProduction && empty($_SESSION['admin_logged_in'])) {
+// Auth: require Google OAuth (development and production)
+if (empty($_SESSION['admin_logged_in'])) {
     if ($clientId) {
         $redirectUri = $baseUrl . '/admin/oauth-callback.php';
+        // Show redirect URI so user can add it in Google Cloud Console if they get redirect_uri_mismatch
+        if (!empty($_GET['show_redirect_uri'])) {
+            ?>
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Admin — Redirect URI</title>
+                <script src="https://cdn.tailwindcss.com"></script>
+            </head>
+            <body class="bg-slate-100 min-h-screen flex items-center justify-center p-4">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 max-w-lg w-full">
+                    <h1 class="text-xl font-semibold text-slate-800 mb-2">Google OAuth redirect URI</h1>
+                    <p class="text-slate-600 text-sm mb-3">If you see <strong>Error 400: redirect_uri_mismatch</strong>, add this <strong>exact</strong> URI in Google Cloud Console:</p>
+                    <p class="mb-4"><a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener" class="text-blue-600 underline">APIs &amp; Services → Credentials</a> → your OAuth 2.0 Client ID → <strong>Authorized redirect URIs</strong> → Add URI</p>
+                    <p class="bg-slate-100 p-3 rounded-lg font-mono text-sm break-all mb-4" id="uri"><?= htmlspecialchars($redirectUri) ?></p>
+                    <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('uri').textContent)" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 rounded text-sm font-medium text-slate-700 mr-2">Copy</button>
+                    <a href="<?= htmlspecialchars($baseUrl) ?>/admin/" class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700">Continue to Google sign-in</a>
+                </div>
+            </body>
+            </html>
+            <?php
+            exit;
+        }
         $authUrl = 'https://accounts.google.com/o/oauth2/auth?' . http_build_query([
             'client_id' => $clientId,
             'redirect_uri' => $redirectUri,
@@ -84,9 +108,9 @@ $projectRoot = dirname(__DIR__, 2);
     <div class="max-w-5xl mx-auto">
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-2xl font-semibold text-slate-800">Meeting Minutes — Admin</h1>
-            <?php if ($isProduction && !empty($_SESSION['admin_logged_in'])): ?>
+            
                 <a href="<?= htmlspecialchars($baseUrl) ?>/admin/logout.php" class="text-sm text-slate-600 hover:text-slate-800">Sign out</a>
-            <?php endif; ?>
+            
         </div>
 
         <?php if (empty($meetings)): ?>

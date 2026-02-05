@@ -6,8 +6,8 @@ session_start();
 $config = require __DIR__ . '/../../config/config.php';
 require __DIR__ . '/../../config/db.php';
 
-// In production require login; in development allow
-if ($config['env'] === 'production' && empty($_SESSION['admin_logged_in'])) {
+// Require login (development and production)
+if (empty($_SESSION['admin_logged_in'])) {
     header('Location: ' . $config['app_url'] . '/admin/');
     exit;
 }

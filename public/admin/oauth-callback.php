@@ -5,11 +5,6 @@ declare(strict_types=1);
 session_start();
 $config = require __DIR__ . '/../../config/config.php';
 
-if ($config['env'] !== 'production') {
-    header('Location: ' . $config['app_url'] . '/admin/');
-    exit;
-}
-
 $clientId = $config['google']['client_id'] ?? null;
 $clientSecret = $config['google']['client_secret'] ?? null;
 $baseUrl = $config['app_url'];
@@ -62,6 +57,28 @@ if ($response === false) {
 $data = json_decode($response, true);
 if (empty($data['access_token'])) {
     $_SESSION['admin_error'] = 'Invalid response from Google.';
+    header('Location: ' . $baseUrl . '/admin/');
+    exit;
+}
+
+// Fetch user email and restrict to allowed domain (e.g. @crosspointchurchsv.org)
+$allowedDomain = $config['admin_allowed_email_domain'] ?? 'crosspointchurchsv.org';
+$userinfoUrl = 'https://www.googleapis.com/oauth2/v2/userinfo';
+$userinfoCtx = stream_context_create([
+    'http' => [
+        'method' => 'GET',
+        'header' => "Authorization: Bearer " . $data['access_token'] . "\r\n",
+    ],
+]);
+$userinfoResponse = @file_get_contents($userinfoUrl, false, $userinfoCtx);
+$userEmail = null;
+if ($userinfoResponse !== false) {
+    $userinfo = json_decode($userinfoResponse, true);
+    $userEmail = isset($userinfo['email']) ? strtolower(trim($userinfo['email'])) : null;
+}
+$domainSuffix = '@' . strtolower($allowedDomain);
+if ($userEmail === null || substr($userEmail, -strlen($domainSuffix)) !== $domainSuffix) {
+    $_SESSION['admin_error'] = 'Access restricted to @' . $allowedDomain . ' only.';
     header('Location: ' . $baseUrl . '/admin/');
     exit;
 }

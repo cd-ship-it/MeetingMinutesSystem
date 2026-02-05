@@ -1,0 +1,10 @@
+# Serve index.php for directory requests (so / and /public/ don't show index.php in URL)
+DirectoryIndex index.php
+
+# Redirect any request for index.php to clean URL (hides technology)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # If the request is for index.php, redirect to same path without it (keeps query string)
+    RewriteCond %{THE_REQUEST} \s/.*?/index\.php [NC]
+    RewriteRule ^index\.php$ . [R=301,L]
+</IfModule>

@@ -40,6 +40,7 @@ $config = [
         'client_secret' => getenv('GOOGLE_CLIENT_SECRET'),
         'credentials_path' => getenv('GOOGLE_CREDENTIALS_PATH'),
     ],
+    'admin_allowed_email_domain' => getenv('ADMIN_ALLOWED_EMAIL_DOMAIN') ?: 'crosspointchurchsv.org',
     'openai' => [
         'api_key' => getenv('OPENAI_API_KEY') ?: '',
     ],
@@ -48,7 +49,13 @@ $config = [
         FILTER_VALIDATE_BOOLEAN
     ),
     'upload' => [
-        'dir' => dirname(__DIR__) . '/uploads',
+        'dir' => (function () {
+            $v = getenv('UPLOAD_DIR');
+            if ($v !== false && $v !== '') {
+                return $v[0] === '/' ? $v : dirname(__DIR__) . '/' . $v;
+            }
+            return dirname(__DIR__) . '/uploads';
+        })(),
         'max_bytes' => 20 * 1024 * 1024, // 20 MB
         'allowed_extensions' => ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'odt', 'ods', 'txt', 'rtf'],
     ],
