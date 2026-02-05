@@ -28,13 +28,14 @@ if (!$row || $row['document_type'] !== 'file' || empty($row['file_path'])) {
     exit('File not found');
 }
 
-$projectRoot = dirname(__DIR__, 2);
-$fullPath = $projectRoot . '/' . $row['file_path'];
+$uploadDir = $config['upload']['dir'];
+$fileName = basename($row['file_path']);
+$fullPath = $uploadDir . '/' . $fileName;
 
 // Prevent directory traversal
-$realRoot = realpath($projectRoot);
+$realRoot = realpath($uploadDir);
 $realPath = realpath($fullPath);
-if ($realPath === false || strpos($realPath, $realRoot) !== 0) {
+if ($realRoot === false || $realPath === false || strpos($realPath, $realRoot) !== 0) {
     http_response_code(404);
     exit('File not found');
 }
@@ -57,7 +58,7 @@ $mimeTypes = [
 ];
 $ext = strtolower(pathinfo($realPath, PATHINFO_EXTENSION));
 $mime = $mimeTypes[$ext] ?? 'application/octet-stream';
-$name = basename($row['file_path']);
+$name = $fileName;
 
 header('Content-Type: ' . $mime);
 header('Content-Disposition: inline; filename="' . basename($name) . '"');

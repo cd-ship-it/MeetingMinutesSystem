@@ -91,7 +91,7 @@ if ($hasFile) {
         sendError('Could not save file.', $baseUrl, $isXhr);
     }
     $documentType = 'file';
-    $filePath = 'uploads/' . $safeName;
+    $filePath = $safeName;
 }
 
 if ($hasUrl && !$documentType) {
@@ -131,8 +131,8 @@ SQL;
         'document_url' => $storedUrl,
     ]);
 } catch (Throwable $e) {
-    if ($filePath && is_file($config['upload']['dir'] . '/' . basename($filePath))) {
-        @unlink($config['upload']['dir'] . '/' . basename($filePath));
+    if ($filePath && is_file($uploadDir . '/' . basename($filePath))) {
+        @unlink($uploadDir . '/' . basename($filePath));
     }
     app_log('[submit] ' . $e->getMessage(), $config);
     app_log('[submit] ' . $e->getTraceAsString(), $config);
@@ -145,4 +145,5 @@ if ($isXhr) {
     exit;
 }
 header('Location: ' . $baseUrl . '/?success=1');
+
 exit;

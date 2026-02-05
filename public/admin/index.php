@@ -145,7 +145,8 @@ $projectRoot = dirname(__DIR__, 2);
                         <div class="flex-shrink-0">
                             <?php if ($m['document_type'] === 'file' && !empty($m['file_path'])): ?>
                                 <?php
-                                $fullPath = $projectRoot . '/' . $m['file_path'];
+                                $uploadDir = $config['upload']['dir'];
+                                $fullPath = $uploadDir . '/' . basename($m['file_path']);
                                 $exists = is_file($fullPath);
                                 ?>
                                 <?php if ($exists): ?>
