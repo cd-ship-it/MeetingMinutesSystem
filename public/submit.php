@@ -91,7 +91,7 @@ if ($hasFile) {
         sendError('Could not save file.', $baseUrl, $isXhr);
     }
     $documentType = 'file';
-    $filePath = $safeName;
+    $filePath = $uploadDir . '/' . $safeName;
 }
 
 if ($hasUrl && !$documentType) {

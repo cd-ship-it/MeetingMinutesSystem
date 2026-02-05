@@ -30,7 +30,7 @@ if (!$row || $row['document_type'] !== 'file' || empty($row['file_path'])) {
 
 $uploadDir = $config['upload']['dir'];
 $fileName = basename($row['file_path']);
-$fullPath = $uploadDir . '/' . $fileName;
+$fullPath = $fileName;
 
 // Prevent directory traversal
 $realRoot = realpath($uploadDir);
