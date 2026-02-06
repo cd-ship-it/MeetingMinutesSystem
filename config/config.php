@@ -66,19 +66,16 @@ $config = [
     'required_fields' => [
         'chair_first_name',
         'chair_last_name',
-        'chair_email',
         'campus_name',
-        'ministry',
-        'pastor_in_charge',
-        'meeting_type'
+        'ministry'
     ],
     'campus_names' => [
+        'Church-wide',  
         'Milpitas',
         'Pleasanton',
         'San Leandro',
         'Peninsula',
-        'Tracy',
-        'Church-wide'     
+        'Tracy'
     ],
     'ministry_names' => [
         'Worship',
