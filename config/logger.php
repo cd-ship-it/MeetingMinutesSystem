@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Append a line to the project log file (config['log']).
  * Call after config is loaded. All app logging goes to logs/ folder.
  */
-function app_log(string $message, array $config = null): void
+function app_log(string $message, ?array $config = null): void
 {
     if ($config === null) {
         $config = require __DIR__ . '/config.php'; // already loaded by caller in most cases

@@ -20,7 +20,6 @@ $ministry_names = $config['ministry_names'] ?? [];
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         #doc-paste-editor:empty::before { content: attr(data-placeholder); color: #94a3b8; }
-        #doc-paste-editor { max-height: 320px; overflow-y: auto; overflow-x: hidden; }
         .doc-panel {
             overflow: hidden;
             transition: max-height 0.4s ease-out, opacity 0.3s ease-out, transform 0.3s ease-out;
@@ -66,18 +65,18 @@ $ministry_names = $config['ministry_names'] ?? [];
                 <h2 class="text-xl font-semibold text-slate-800 mb-4">Submit meeting minutes *</h2>
 
                 
-                <div class="px-4 pt-5 pb-5 rounded-lg border border-slate-200 bg-red-50 mt-4 space-y-4">
+                <div class="px-4 pt-5 pb-5 rounded-lg border border-slate-200 bg-blue-50 mt-4 space-y-4">
                     <p cclass="block text-base font-semibold text-slate-600 mb-1"">Please choose one method to submit your meeting minutes.</p>
 
-                    <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr_auto_1fr] gap-4 items-center" role="group" aria-label="Document source">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4" role="group" aria-label="Document source">
                         <button type="button" id="doc-option-upload" class="doc-source-option rounded-xl border-2 border-slate-200 bg-white p-4 text-left transition-all cursor-pointer hover:border-slate-300 hover:bg-slate-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:border-blue-500 flex flex-col items-start" data-doc-source="upload" aria-pressed="false">
                             <span class="flex-shrink-0 w-10 h-10 text-slate-500 mb-3" aria-hidden="true">
                                 <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
                             </span>
                             <span class="block text-base font-semibold text-slate-800 mb-1">Upload file</span>
-                            <span class="text-sm text-slate-500">PDF, Word, or .txt</span>
+                            <span class="text-sm text-slate-500">PDF, Word, or .txt</span>Link to document
+
                         </button>
-                        <div class="text-center text-slate-400 font-semibold select-none">or</div>
                         <button type="button" id="doc-option-link" class="doc-source-option rounded-xl border-2 border-slate-200 bg-white p-4 text-left transition-all cursor-pointer hover:border-slate-300 hover:bg-slate-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:border-blue-500 flex flex-col items-start" data-doc-source="link" aria-pressed="false">
                             <span class="flex-shrink-0 w-10 h-10 text-slate-500 mb-3" aria-hidden="true">
                                 <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.303l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" /></svg>
@@ -85,7 +84,6 @@ $ministry_names = $config['ministry_names'] ?? [];
                             <span class="block text-base font-semibold text-slate-800 mb-1">Web link</span>
                             <span class="text-sm text-slate-500">Google Doc, Dropbox, etc.</span>
                         </button>
-                        <div class="text-center text-slate-400 font-semibold select-none">or</div>
                         <button type="button" id="doc-option-paste" class="doc-source-option rounded-xl border-2 border-slate-200 bg-white p-4 text-left transition-all cursor-pointer hover:border-slate-300 hover:bg-slate-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:border-blue-500 flex flex-col items-start" data-doc-source="paste" aria-pressed="false">
                             <span class="flex-shrink-0 w-10 h-10 text-slate-500 mb-3" aria-hidden="true">
                                 <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9.75a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" /></svg>
@@ -94,7 +92,7 @@ $ministry_names = $config['ministry_names'] ?? [];
                             <span class="text-sm text-slate-500">Paste content from your document</span>
                         </button>
                     </div>
- 
+
                     <div id="doc-panel-upload" class="doc-panel doc-panel-hidden">
                         <div id="drop-zone" class="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer">
                             <input type="file" name="document_file" id="document_file" accept=".pdf,.doc,.docx,.xls,.xlsx,.odt,.ods,.txt,.rtf" class="hidden">
@@ -119,34 +117,27 @@ $ministry_names = $config['ministry_names'] ?? [];
                                 <div id="upload-progress-bar" class="h-full bg-blue-600 transition-all duration-200" style="width: 0%"></div>
                             </div>
                         </div>
-                        <div class="mt-3 flex items-center justify-end">
-                            <button type="button" id="delete-upload" class="inline-flex items-center rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                                Delete file / Cancel
-                            </button>
-                        </div>
                     </div>
 
                     <div id="doc-panel-link" class="doc-panel doc-panel-hidden">
                         <label for="document_url" class="block text-base font-semibold text-slate-600 mb-1">Link to document</label>
                         <input type="url" name="document_url" id="document_url" placeholder="https://..."
                             class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
-                        <div class="mt-3 flex items-center justify-end">
-                            <button type="button" id="clear-link" class="inline-flex items-center rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                                Cancel / Clear
-                            </button>
-                        </div>
                     </div>
 
                     <div id="doc-panel-paste" class="doc-panel doc-panel-hidden">
                         <label class="block text-base font-semibold text-slate-600 mb-1">Paste your document content</label>
                         <input type="hidden" name="document_paste" id="document_paste" value="">
                         <div class="rounded-lg border border-slate-300 bg-white focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 overflow-hidden">
+                            <div id="doc-paste-toolbar" class="flex flex-wrap items-center gap-1 p-2 border-b border-slate-200 bg-slate-50" role="toolbar" aria-label="Formatting">
+                                <button type="button" class="doc-format-btn p-2 rounded hover:bg-slate-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1" data-cmd="bold" title="Bold"><span class="font-bold text-slate-800">B</span></button>
+                                <button type="button" class="doc-format-btn p-2 rounded hover:bg-slate-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1" data-cmd="italic" title="Italic"><span class="italic text-slate-800">I</span></button>
+                                <button type="button" class="doc-format-btn p-2 rounded hover:bg-slate-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1" data-cmd="underline" title="Underline"><span class="underline text-slate-800">U</span></button>
+                                <span class="w-px h-6 bg-slate-300 mx-1" aria-hidden="true"></span>
+                                <button type="button" class="doc-format-btn p-2 rounded hover:bg-slate-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1" data-cmd="insertUnorderedList" title="Bullet list">• List</button>
+                                <button type="button" class="doc-format-btn p-2 rounded hover:bg-slate-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1" data-cmd="insertOrderedList" title="Numbered list">1. List</button>
+                            </div>
                             <div class="min-h-[200px] p-3" contenteditable="true" id="doc-paste-editor" data-placeholder="Paste or type your meeting minutes here…"></div>
-                        </div>
-                        <div class="mt-3 flex items-center justify-end">
-                            <button type="button" id="clear-paste" class="inline-flex items-center rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                                Cancel / Clear
-                            </button>
                         </div>
                     </div>
                     <p id="doc-error" class="text-sm text-red-600 mt-1 hidden">Please upload a file, provide a web link, or paste your document content.</p>
@@ -159,7 +150,7 @@ $ministry_names = $config['ministry_names'] ?? [];
                 <div class="block text-base font-light text-slate-600 mb-4">
                     The person who called or hosted the meeting.
                 </div>
-                <div class="px-4 pt-5 pb-5 rounded-lg border border-slate-200 bg-red-50 space-y-4">
+                <div class="px-4 pt-5 pb-5 rounded-lg border border-slate-200 bg-blue-50 space-y-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label for="chair_first_name" class="block text-base font-semibold text-slate-600 mb-1">First name<?= in_array('chair_first_name', $required_fields_ui) ? ' *' : '' ?></label>
@@ -184,7 +175,7 @@ $ministry_names = $config['ministry_names'] ?? [];
             <section>
                 <h2 class="text-xl font-semibold text-slate-800 mb-4">Meeting details</h2>
                 <div class="space-y-6">
-                    <div class="px-4 pt-5 pb-5 rounded-lg border border-slate-200 bg-red-50">
+                    <div class="px-4 pt-5 pb-5 rounded-lg border border-slate-200 bg-blue-50">
                         <span class="block text-base font-semibold text-slate-600 mb-2">Campus name<?= in_array('campus_name', $required_fields_ui) ? ' *' : '' ?></span>
                         <div class="grid grid-cols-2 gap-2" role="group" aria-label="Campus name">
                             <?php foreach ($campus_names as $i => $name): ?>
@@ -195,7 +186,7 @@ $ministry_names = $config['ministry_names'] ?? [];
                             <?php endforeach; ?>
                         </div>
                     </div>
-                    <div class="px-4 pt-5 pb-5 rounded-lg border border-slate-200 bg-red-50">
+                    <div class="px-4 pt-5 pb-5 rounded-lg border border-slate-200 bg-blue-50">
                         <span class="block text-base font-semibold text-slate-600 mb-2">Ministry<?= in_array('ministry', $required_fields_ui) ? ' *' : '' ?></span>
                         <div class="grid grid-cols-2 gap-2" role="group" aria-label="Ministry">
                             <?php foreach ($ministry_names as $i => $name): ?>
@@ -206,24 +197,24 @@ $ministry_names = $config['ministry_names'] ?? [];
                             <?php endforeach; ?>
                         </div>
                         <div id="ministry-other-wrap" class="mt-3 hidden p-4 rounded-lg bg-green-50 border border-green-200">
-                            <label for="ministry_other" class="block text-base font-semibold text-slate-600 mb-1">Please specify ministry name *<?= in_array('ministry_other', $required_fields_ui) ? ' *' : '' ?></label>
+                            <label for="ministry_other" class="block text-base font-semibold text-slate-600 mb-1">Please specify ministry name<?= in_array('ministry_other', $required_fields_ui) ? ' *' : '' ?></label>
                             <input type="text" name="ministry_other" id="ministry_other" autocomplete="off"
-                                placeholder="<?= in_array('ministry_other', $required_fields_ui) ? 'Enter ministry name' : 'Required' ?>"
+                                placeholder="<?= in_array('ministry_other', $required_fields_ui) ? 'Enter ministry name' : 'Optional' ?>"
                                 class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
                             <p id="ministry-other-error" class="text-sm text-red-600 mt-1 hidden">Please enter the ministry name.</p>
                         </div>
                     </div>
-                    <div class="px-4 pt-5 pb-5 rounded-lg border border-slate-200 bg-grey-50">
+                    <div class="px-4 pt-5 pb-5 rounded-lg border border-slate-200 bg-blue-50">
                         <label for="pastor_in_charge" class="block text-base font-semibold text-slate-600 mb-1">Pastor-in-charge<?= in_array('pastor_in_charge', $required_fields_ui) ? ' *' : '' ?></label>
                         <input type="text" name="pastor_in_charge" id="pastor_in_charge"<?= in_array('pastor_in_charge', $required_fields_ui) ? ' required' : ' placeholder="Optional"' ?>
                             class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
                     </div>
-                    <div class="px-4 pt-5 pb-5 rounded-lg border border-slate-200 bg-grey-50">
+                    <div class="px-4 pt-5 pb-5 rounded-lg border border-slate-200 bg-blue-50">
                         <label for="attendees" class="block text-base font-semibold text-slate-600 mb-1">Attendees </label>
                         <textarea name="attendees" id="attendees" rows="2" placeholder="Optional"
                             class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"></textarea>
                     </div>
-                    <div class="px-4 pt-5 pb-5 rounded-lg border border-slate-200 bg-blu    e-50">
+                    <div class="px-4 pt-5 pb-5 rounded-lg border border-slate-200 bg-blue-50">
                         <label class="block text-base font-semibold text-slate-600 mb-2">Meeting type<?= in_array('meeting_type', $required_fields_ui) ? ' *' : ' (Optional)' ?></label>
                         <div class="flex gap-4">
                             <label class="inline-flex items-center">
@@ -236,7 +227,7 @@ $ministry_names = $config['ministry_names'] ?? [];
                             </label>
                         </div>
                     </div>
-                    <div class="px-4 pt-5 pb-5 rounded-lg border border-slate-200 bg-grey-50">
+                    <div class="px-4 pt-5 pb-5 rounded-lg border border-slate-200 bg-blue-50">
                         <label for="description" class="block text-base font-semibold text-slate-600 mb-1">Short description of the meeting</label>
                         <textarea name="description" id="description" rows="3" placeholder="Optional"
                             class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"></textarea>
@@ -247,7 +238,7 @@ $ministry_names = $config['ministry_names'] ?? [];
             <hr class="my-6 border-slate-200">
          
 
-            <div class="px-4 pt-5 pb-5 rounded-lg border border-slate-200 bg-grey-50 mt-4">
+            <div class="px-4 pt-5 pb-5 rounded-lg border border-slate-200 bg-blue-50 mt-4">
                 <label for="comments" class="block text-base font-semibold text-slate-600 mb-1">Anything else you want to tell us about the meeting</label>
                 <textarea name="comments" id="comments" rows="3" placeholder="Optional"
                     class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"></textarea>
@@ -272,13 +263,9 @@ $ministry_names = $config['ministry_names'] ?? [];
                 var ministryOtherError = document.getElementById('ministry-other-error');
                 if (!ministryOtherWrap || !ministryOtherInput) return;
 
-                function isOthersSelectionValue(value) {
-                    return typeof value === 'string' && value.trim().toLowerCase() === 'others';
-                }
-
                 function updateOthersVisibility() {
                     var checked = document.querySelector('input[name="ministry"]:checked');
-                    var isOthers = checked && isOthersSelectionValue(checked.value);
+                    var isOthers = checked && checked.value === 'Others';
                     ministryOtherWrap.classList.toggle('hidden', !isOthers);
                     ministryOtherInput.required = isOthers;
                     if (!isOthers) {
@@ -290,13 +277,6 @@ $ministry_names = $config['ministry_names'] ?? [];
                 ministryRadios.forEach(function (r) {
                     r.addEventListener('change', updateOthersVisibility);
                 });
-
-                ministryOtherInput.addEventListener('input', function () {
-                    if (ministryOtherError) ministryOtherError.classList.add('hidden');
-                });
-
-                // Ensure correct initial state (e.g. if "Others" is pre-selected)
-                updateOthersVisibility();
             })();
 
             var dropZone = document.getElementById('drop-zone');
@@ -305,7 +285,6 @@ $ministry_names = $config['ministry_names'] ?? [];
             var fileUploadedBox = document.getElementById('file-uploaded-box');
             var fileUploadedName = document.getElementById('file-uploaded-name');
             var clearFileBtn = document.getElementById('clear-file');
-            var deleteUploadBtn = document.getElementById('delete-upload');
             var uploadProgressWrap = document.getElementById('upload-progress-wrap');
             var uploadProgressBar = document.getElementById('upload-progress-bar');
             var uploadProgressPct = document.getElementById('upload-progress-pct');
@@ -322,20 +301,13 @@ $ministry_names = $config['ministry_names'] ?? [];
                 var docPanels = document.querySelectorAll('.doc-panel');
                 var selectedClasses = 'border-blue-500 bg-blue-100 ring-2 ring-blue-500';
                 var baseClasses = 'border-slate-200 bg-white';
-                var currentDocSource = null;
 
                 function setDocSource(source) {
-                    currentDocSource = source;
                     docOptions.forEach(function (btn) {
-                        var sourceKey = btn.getAttribute('data-doc-source');
-                        var isSelected = sourceKey === source;
-                        var isDisabled = source !== null && !isSelected;
+                        var isSelected = btn.getAttribute('data-doc-source') === source;
                         btn.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
-                        btn.disabled = isDisabled;
-                        btn.classList.remove('border-blue-500', 'bg-blue-100', 'ring-2', 'ring-blue-500', 'border-slate-200', 'bg-white', 'opacity-50', 'cursor-not-allowed', 'pointer-events-none');
-                        if (isDisabled) {
-                            btn.classList.add('border-slate-200', 'bg-white', 'opacity-50', 'cursor-not-allowed', 'pointer-events-none');
-                        } else if (isSelected) {
+                        btn.classList.remove('border-blue-500', 'bg-blue-100', 'ring-2', 'ring-blue-500', 'border-slate-200', 'bg-white');
+                        if (isSelected) {
                             btn.classList.add('border-blue-500', 'bg-blue-100', 'ring-2', 'ring-blue-500');
                         } else {
                             btn.classList.add('border-slate-200', 'bg-white');
@@ -350,25 +322,8 @@ $ministry_names = $config['ministry_names'] ?? [];
                     });
                 }
 
-                function enableAllDocOptions() {
-                    currentDocSource = null;
-                    docOptions.forEach(function (btn) {
-                        btn.disabled = false;
-                        btn.setAttribute('aria-pressed', 'false');
-                        btn.classList.remove('border-blue-500', 'bg-blue-100', 'ring-2', 'ring-blue-500', 'opacity-50', 'cursor-not-allowed', 'pointer-events-none');
-                        btn.classList.add('border-slate-200', 'bg-white');
-                    });
-                    docPanels.forEach(function (panel) {
-                        panel.classList.add('doc-panel-hidden');
-                    });
-                }
-
-                window.getCurrentDocSource = function () { return currentDocSource; };
-                window.enableAllDocOptions = enableAllDocOptions;
-
                 docOptions.forEach(function (btn) {
                     btn.addEventListener('click', function () {
-                        if (btn.disabled) return;
                         setDocSource(btn.getAttribute('data-doc-source'));
                     });
                 });
@@ -378,8 +333,6 @@ $ministry_names = $config['ministry_names'] ?? [];
                 var pasteEditor = document.getElementById('doc-paste-editor');
                 var toolbar = document.getElementById('doc-paste-toolbar');
                 if (!pasteEditor) return;
-                var pasteInput = document.getElementById('document_paste');
-                var clearPasteBtn = document.getElementById('clear-paste');
 
                 function sanitizePasteHtml(html) {
                     if (!html || typeof html !== 'string') return '';
@@ -427,20 +380,6 @@ $ministry_names = $config['ministry_names'] ?? [];
                         document.execCommand('insertHTML', false, clean);
                     }
                 });
-                pasteEditor.addEventListener('input', function () {
-                    var text = (pasteEditor.innerText || pasteEditor.textContent || '').trim();
-                    if (text.length === 0 && window.getCurrentDocSource && window.getCurrentDocSource() === 'paste') window.enableAllDocOptions();
-                });
-
-                if (clearPasteBtn) {
-                    clearPasteBtn.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        pasteEditor.innerHTML = '';
-                        if (pasteInput) pasteInput.value = '';
-                        if (typeof window.enableAllDocOptions === 'function') window.enableAllDocOptions();
-                    });
-                }
             })();
 
             var dropZoneDefaultHtml = 'Drag and drop a file here, or <span class="text-blue-600 font-medium">browse</span>';
@@ -449,13 +388,11 @@ $ministry_names = $config['ministry_names'] ?? [];
                 var hasFile = fileInput.files && fileInput.files.length > 0;
                 if (hasFile) {
                     fileUploadedName.textContent = fileInput.files[0].name;
-                    dropZone.classList.add('hidden');
                     fileUploadedBox.classList.remove('hidden');
                     docError.classList.add('hidden');
                 } else {
-                    dropZone.classList.remove('hidden');
-                    dropZoneText.innerHTML = dropZoneDefaultHtml;
                     fileUploadedBox.classList.add('hidden');
+                    dropZoneText.innerHTML = dropZoneDefaultHtml;
                 }
             }
 
@@ -463,10 +400,12 @@ $ministry_names = $config['ministry_names'] ?? [];
                 if (!e.target.closest('#clear-file')) fileInput.click();
             });
             fileInput.addEventListener('change', function () {
-                updateFileUI();
-                if (!fileInput.files.length) {
+                if (fileInput.files.length) {
+                    fileUploadedName.textContent = fileInput.files[0].name;
+                    fileUploadedBox.classList.remove('hidden');
+                    docError.classList.add('hidden');
+                } else {
                     submitBtn.disabled = false;
-                    if (window.getCurrentDocSource && window.getCurrentDocSource() === 'upload') window.enableAllDocOptions();
                 }
             });
 
@@ -474,21 +413,10 @@ $ministry_names = $config['ministry_names'] ?? [];
                 e.preventDefault();
                 e.stopPropagation();
                 fileInput.value = '';
-                updateFileUI();
+                fileUploadedBox.classList.add('hidden');
+                dropZoneText.innerHTML = dropZoneDefaultHtml;
                 submitBtn.disabled = false;
-                if (window.getCurrentDocSource && window.getCurrentDocSource() === 'upload') window.enableAllDocOptions();
             });
-
-            if (deleteUploadBtn) {
-                deleteUploadBtn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    fileInput.value = '';
-                    updateFileUI();
-                    submitBtn.disabled = false;
-                    if (typeof window.enableAllDocOptions === 'function') window.enableAllDocOptions();
-                });
-            }
 
             dropZone.addEventListener('dragover', function (e) {
                 e.preventDefault();
@@ -505,22 +433,6 @@ $ministry_names = $config['ministry_names'] ?? [];
                     updateFileUI();
                 }
             });
-
-            var documentUrlInput = document.getElementById('document_url');
-            if (documentUrlInput) {
-                documentUrlInput.addEventListener('input', function () {
-                    if (this.value.trim().length === 0 && window.getCurrentDocSource && window.getCurrentDocSource() === 'link') window.enableAllDocOptions();
-                });
-            }
-            var clearLinkBtn = document.getElementById('clear-link');
-            if (clearLinkBtn) {
-                clearLinkBtn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (documentUrlInput) documentUrlInput.value = '';
-                    if (typeof window.enableAllDocOptions === 'function') window.enableAllDocOptions();
-                });
-            }
 
             form.addEventListener('submit', function (e) {
                 var pasteEditor = document.getElementById('doc-paste-editor');

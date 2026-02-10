@@ -34,6 +34,7 @@ $config = [
         'name' => getenv('DB_NAME') ?: 'crossp11_db1',
         'user' => getenv('DB_USER') ?: 'root',
         'password' => getenv('DB_PASSWORD') ?: 'root',
+        'socket' => (($s = getenv('DB_SOCKET')) !== false && $s !== '') ? $s : null,
     ],
     'google' => [
         'client_id' => getenv('GOOGLE_CLIENT_ID'),
@@ -43,6 +44,8 @@ $config = [
     'admin_allowed_email_domain' => getenv('ADMIN_ALLOWED_EMAIL_DOMAIN') ?: 'crosspointchurchsv.org',
     'openai' => [
         'api_key' => getenv('OPENAI_API_KEY') ?: '',
+        'model' => getenv('OPENAI_MODEL') ?: 'gpt-4o-mini',
+        'summary_prompt' => getenv('OPENAI_SUMMARY_PROMPT') ?: 'Summarize the following meeting minutes in exactly 3 bullet points in English. The content may be in Chinese or English; output only the 3 bullet points, no heading or extra text.',
     ],
     'use_ai_for_minutes_summary' => filter_var(
         (($v = getenv('USE_AI_FOR_MINUTES_SUMMARY')) !== false && $v !== '' ? $v : '0'),
