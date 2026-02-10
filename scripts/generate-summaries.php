@@ -90,7 +90,7 @@ $baseSql = 'SELECT id, document_type, file_path, document_url, pasted_text FROM 
 $baseSql .= $forceRefresh
     ? "document_type IN ('file', 'url', 'paste')"
     : "ai_summary IS NULL AND document_type IN ('file', 'url', 'paste')";
-$baseSql .= ' ORDER BY id ASC';
+$baseSql .= ' ORDER BY id DESC';
 if ($limit > 0) {
     $baseSql .= ' LIMIT :limit';
 }

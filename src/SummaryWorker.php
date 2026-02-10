@@ -57,11 +57,7 @@ function get_minutes_md_from_file(string $filePath, array $config, callable $log
 
     $ext = strtolower(pathinfo($fullPath, PATHINFO_EXTENSION));
 
-    if ($ext === 'pdf') {
-        $log('PDF not yet supported (placeholder). Skipping.');
-        return null;
-    }
-
+    // Only allow non-PDF types here; PDFs are intentionally skipped for now.
     $allowedForExtract = ['docx', 'doc', 'txt', 'rtf'];
     if (!in_array($ext, $allowedForExtract, true)) {
         $log("Unsupported file extension for extraction: {$ext}");
@@ -204,8 +200,12 @@ function html_to_markdown(string $html): string
 
 /**
  * Call OpenAI Chat Completions API for summary. Uses OPENAI_MODEL and OPENAI_SUMMARY_PROMPT from config.
+ *
+ * @param string $minutesMd   The markdown minutes content to summarize.
+ * @param array  $config      App configuration (must contain 'openai' settings).
+ * @param int    $timeoutSec  Network timeout in seconds (default 90; can be lowered for web previews).
  */
-function request_openai_summary(string $minutesMd, array $config): ?string
+function request_openai_summary(string $minutesMd, array $config, int $timeoutSec = 90): ?string
 {
     $apiKey = $config['openai']['api_key'] ?? '';
     $model = $config['openai']['model'] ?? 'gpt-4o-mini';
@@ -243,7 +243,7 @@ function request_openai_summary(string $minutesMd, array $config): ?string
             'Authorization: Bearer ' . $apiKey,
         ],
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT => 90,
+        CURLOPT_TIMEOUT => $timeoutSec > 0 ? $timeoutSec : 90,
     ]);
     $response = curl_exec($ch);
     $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
