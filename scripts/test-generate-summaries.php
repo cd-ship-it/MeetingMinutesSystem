@@ -65,11 +65,20 @@ if (count($rows) === 0) {
 
 $log('Testing last ' . count($rows) . ' meeting(s) (limit=' . $limit . ').');
 $processed = 0;
+$updateStmt = $pdo->prepare('UPDATE meetings SET minutes_md = :minutes_md, ai_summary = :ai_summary WHERE id = :id');
 foreach ($rows as $row) {
     $id = (int) $row['id'];
-    if (process_meeting($id, $row, $pdo, $config, $log)) {
-        $processed++;
+    $result = process_meeting($id, $row, $config, $log);
+    if ($result === null) {
+        continue;
     }
+    $updateStmt->execute([
+        'id' => $result->id,
+        'minutes_md' => $result->minutes_md,
+        'ai_summary' => $result->ai_summary,
+    ]);
+    $log("Meeting {$result->id}: ai_summary and minutes_md updated");
+    $processed++;
 }
 $log('Done. Updated ' . $processed . ' of ' . count($rows) . ' meeting(s).');
 exit(0);

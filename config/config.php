@@ -46,6 +46,7 @@ $config = [
         'api_key' => getenv('OPENAI_API_KEY') ?: '',
         'model' => getenv('OPENAI_MODEL') ?: 'gpt-4o-mini',
         'summary_prompt' => getenv('OPENAI_SUMMARY_PROMPT') ?: 'Summarize the following meeting minutes in exactly 3 bullet points in English. The content may be in Chinese or English; output only the 3 bullet points, no heading or extra text.',
+        'summary_max_percent' => max(1, min(100, (int) (getenv('OPENAI_SUMMARY_MAX_PERCENT') ?: '30'))),
     ],
     'use_ai_for_minutes_summary' => filter_var(
         (($v = getenv('USE_AI_FOR_MINUTES_SUMMARY')) !== false && $v !== '' ? $v : '0'),

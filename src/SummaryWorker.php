@@ -199,7 +199,26 @@ function html_to_markdown(string $html): string
 }
 
 /**
+ * Count "words" for summary length: Latin/alphanumeric runs + one per CJK character.
+ * So "Hello world" = 2, "会议记录" = 4, mixed "Meeting 会议" = 1 + 2 = 3.
+ */
+function count_words_for_summary(string $text): int
+{
+    $total = 0;
+    // Latin / digits / other non-CJK words (each run = 1 word)
+    if (preg_match_all('/[\p{Latin}\p{N}\p{M}]+/u', $text, $m)) {
+        $total += count($m[0]);
+    }
+    // CJK: each character counts as one "word" (no spaces between characters)
+    if (preg_match_all('/[\p{Han}\p{Hiragana}\p{Katakana}\p{Hangul}]/u', $text, $m)) {
+        $total += count($m[0]);
+    }
+    return max(1, $total);
+}
+
+/**
  * Call OpenAI Chat Completions API for summary. Uses OPENAI_MODEL and OPENAI_SUMMARY_PROMPT from config.
+ * Replaces XXX in the prompt with the max word count (minutes_md word count × OPENAI_SUMMARY_MAX_PERCENT%).
  *
  * @param string $minutesMd   The markdown minutes content to summarize.
  * @param array  $config      App configuration (must contain 'openai' settings).
@@ -210,10 +229,15 @@ function request_openai_summary(string $minutesMd, array $config, int $timeoutSe
     $apiKey = $config['openai']['api_key'] ?? '';
     $model = $config['openai']['model'] ?? 'gpt-4o-mini';
     $promptTemplate = $config['openai']['summary_prompt'] ?? 'Summarize the following meeting minutes in exactly 3 bullet points in English.';
+    $summaryMaxPercent = $config['openai']['summary_max_percent'] ?? 30;
 
     if ($apiKey === '') {
         return null;
     }
+
+    $wordCount = count_words_for_summary($minutesMd);
+    $maxSummaryWords = max(1, (int) floor($wordCount * $summaryMaxPercent / 100));
+    $promptTemplate = str_replace('XXX', (string) $maxSummaryWords, $promptTemplate);
 
     $userContent = $promptTemplate . "\n\n---\n\n" . $minutesMd;
 
@@ -263,10 +287,24 @@ function request_openai_summary(string $minutesMd, array $config, int $timeoutSe
 }
 
 /**
- * Process one meeting: populate minutes_md, call OpenAI, UPDATE row.
- * Returns true if updated, false if skipped or failed.
+ * Result of processing one meeting with AI (no DB write).
+ * Used by CLI/callers to persist; structure allows future AI fields.
  */
-function process_meeting(int $id, array $row, PDO $pdo, array $config, callable $log): bool
+class MeetingAiResult
+{
+    public int $id;
+    public string $minutes_md;
+    public string $ai_summary;
+    // Reserve for future AI data, e.g.:
+    // public ?string $ai_model = null;
+    // public ?array $ai_metadata = null;
+}
+
+/**
+ * Process one meeting: derive minutes_md, call OpenAI, return result object.
+ * Does not touch the database. Returns null if skipped or failed.
+ */
+function process_meeting(int $id, array $row, array $config, callable $log): ?MeetingAiResult
 {
     $logWithId = function (string $msg) use ($log, $id): void {
         $log("Meeting {$id}: " . $msg);
@@ -274,26 +312,35 @@ function process_meeting(int $id, array $row, PDO $pdo, array $config, callable 
 
     $minutesMd = get_minutes_md_for_row($row, $config, $logWithId);
     if ($minutesMd === null) {
-        return false;
+        return null;
     }
     if (strlen($minutesMd) < SUMMARY_MIN_MINUTES_LENGTH) {
         $logWithId('minutes_md too short, skipping');
-        return false;
+        return null;
     }
+
+    $wordCount = count_words_for_summary($minutesMd);
+    $summaryMaxPercent = $config['openai']['summary_max_percent'] ?? 30;
+    $maxSummaryWords = max(1, (int) floor($wordCount * $summaryMaxPercent / 100));
+    $logWithId("minutes_md word count: {$wordCount}, max summary words: {$maxSummaryWords}");
 
     $summary = request_openai_summary($minutesMd, $config);
     if ($summary === null) {
         $logWithId('OpenAI summary request failed');
-        return false;
+        return null;
+    }
+    // Strip markdown bold markers that the model sometimes returns literally.
+    $summary = str_replace('**', '', $summary);
+    $summary = trim($summary);
+    if ($summary === '') {
+        $logWithId('OpenAI summary empty after stripping');
+        return null;
     }
 
-    $stmt = $pdo->prepare('UPDATE meetings SET minutes_md = :minutes_md, ai_summary = :ai_summary WHERE id = :id');
-    $stmt->execute([
-        'id' => $id,
-        'minutes_md' => $minutesMd,
-        'ai_summary' => $summary,
-    ]);
+    $result = new MeetingAiResult();
+    $result->id = $id;
+    $result->minutes_md = $minutesMd;
+    $result->ai_summary = $summary;
 
-    $logWithId('ai_summary and minutes_md updated');
-    return true;
+    return $result;
 }
