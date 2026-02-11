@@ -120,9 +120,7 @@ $ministry_names = $config['ministry_names'] ?? [];
                             </div>
                         </div>
                         <div class="mt-3 flex items-center justify-end">
-                            <button type="button" id="delete-upload" class="inline-flex items-center rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                                Delete file / Cancel
-                            </button>
+                            <a href="#" role="button" id="delete-upload" class="text-xs font-medium text-red-600 underline hover:text-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded">Delete file / Cancel</a>
                         </div>
                     </div>
 
@@ -131,9 +129,7 @@ $ministry_names = $config['ministry_names'] ?? [];
                         <input type="url" name="document_url" id="document_url" placeholder="https://..."
                             class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
                         <div class="mt-3 flex items-center justify-end">
-                            <button type="button" id="clear-link" class="inline-flex items-center rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                                Cancel / Clear
-                            </button>
+                            <a href="#" role="button" id="clear-link" class="text-xs font-medium text-red-600 underline hover:text-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded">Cancel / Clear</a>
                         </div>
                     </div>
 
@@ -144,9 +140,7 @@ $ministry_names = $config['ministry_names'] ?? [];
                             <div class="min-h-[200px] p-3" contenteditable="true" id="doc-paste-editor" data-placeholder="Paste or type your meeting minutes here…"></div>
                         </div>
                         <div class="mt-3 flex items-center justify-end">
-                            <button type="button" id="clear-paste" class="inline-flex items-center rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                                Cancel / Clear
-                            </button>
+                            <a href="#" role="button" id="clear-paste" class="text-xs font-medium text-red-600 underline hover:text-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded">Cancel / Clear</a>
                         </div>
                     </div>
                     <p id="doc-error" class="text-sm text-red-600 mt-1 hidden">Please upload a file, provide a web link, or paste your document content.</p>
